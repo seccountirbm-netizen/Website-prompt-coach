@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>prompt.coach — sage edition, slide by slide</title>
+  <!-- Quicksand font (soft) & font awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: #eef3ea;
+      color: #3f5347;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide-container {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slides-wrapper {
+      display: flex;
+      width: 600%;
+      height: 100%;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+
+    .slide {
+      flex: 0 0 100vw;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 24px 40px;
+      background: #f4f9f0;
+      scrollbar-width: thin;
+      scrollbar-color: #b7cfbc #e2eedb;
+    }
+
+    .slide::-webkit-scrollbar { width: 8px; }
+    .slide::-webkit-scrollbar-track { background: #e2eedb; border-radius: 20px; }
+    .slide::-webkit-scrollbar-thumb { background: #a1baa9; border-radius: 20px; }
+
+    .bg-sage-soft { background: #e0efe5; }
+    .bg-sage-light { background: #d4e6da; }
+    .card-sage {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(3px);
+      border-radius: 48px;
+      padding: 28px 32px;
+      border: 2px solid #cbdcd0;
+      box-shadow: 0 20px 40px -20px #8fa996;
+    }
+
+    .btn-sage {
+      background: #c8dfd4;
+      border: 2px solid #9fb8aa;
+      color: #2c523e;
+      font-weight: 600;
+      padding: 14px 34px;
+      border-radius: 70px;
+      transition: 0.2s;
+      font-size: 1.1rem;
+      box-shadow: 0 8px 16px #bbd2c5;
+    }
+    .btn-sage:hover {
+      background: #b4d2c2;
+      transform: translateY(-3px);
+    }
+    .btn-outline-sage {
+      background: transparent;
+      border: 2px solid #b4cdbf;
+      color: #345e48;
+      font-weight: 600;
+      padding: 12px 28px;
+      border-radius: 70px;
+    }
+    .btn-outline-sage:hover { background: #e2f0e6; }
+
+    .chip-mentor {
+      background: white;
+      border-radius: 100px;
+      padding: 10px 28px;
+      font-weight: 600;
+      border: 2px solid #c1dacb;
+      color: #2e6248;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 4px 12px #e4f0e6;
+    }
+    .chip-mentor.active {
+      background: #c1e0d1;
+      border-color: #6d9b84;
+      color: #1d4d36;
+    }
+
+    .slide-progress {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 16px;
+      background: #e5f0e4;
+      padding: 14px 28px;
+      border-radius: 80px;
+      border: 2px solid #b5cfbf;
+      z-index: 999;
+      backdrop-filter: blur(4px);
+    }
+    .progress-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #b7cdbf;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+    .progress-dot.active-dot {
+      background: #467a62;
+      transform: scale(1.6);
+      box-shadow: 0 0 0 4px #e2ffe8;
+    }
+
+    .bubble-sage {
+      background: #e4f0e0;
+      border-left: 12px solid #a6c9b6;
+      border-radius: 30px 30px 30px 8px;
+      padding: 22px;
+      color: #2b4d3b;
+      font-weight: 500;
+    }
+    .mind-map {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #cfe3d6;
+      border-radius: 70px;
+      padding: 24px;
+    }
+    .map-item {
+      background: #9cbcaa;
+      padding: 12px 26px;
+      border-radius: 60px;
+      color: #1e452f;
+      font-weight: 600;
+      box-shadow: 0 6px 12px #8fb09d;
+    }
+    .qr-sim {
+      background: #c6d9cb;
+      width: 90px;
+      height: 90px;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+
+    .mascot-corner {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      background: #e2f0e0;
+      border-radius: 120px 120px 40px 120px;
+      padding: 16px 30px 16px 30px;
+      border: 4px solid #b1d0bc;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 20px 30px #b6cdbc;
+      z-index: 1000;
+    }
+    .mascot-emoji { font-size: 4rem; }
+    .mascot-text { font-weight: 600; color: #2a5a42; max-width: 200px; }
+
+    .anti-plag {
+      background: #e2dccd;
+      border-radius: 60px;
+      padding: 20px;
+      border-left: 10px solid #b1a67f;
+    }
+
+    .slide-content {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    h1, h2, h3, h4 { color: #25563c; }
+
+    /* Kapitalisasi awal kalimat pada elemen tertentu */
+    .capitalize-first::first-letter {
+      text-transform: uppercase;
+    }
+    /* Untuk teks dalam elemen tertentu, pastikan awal kalimat huruf besar */
+    p, .chip-mentor, .btn-sage, .btn-outline-sage, .bubble-sage, .map-item, .slide-content h2, .slide-content h3, .slide-content h4 {
+      text-transform: lowercase;
+    }
+    .slide-content h2::first-letter, .slide-content h3::first-letter, .slide-content h4::first-letter,
+    p::first-letter, .chip-mentor::first-letter, .btn-sage::first-letter, .btn-outline-sage::first-letter,
+    .bubble-sage::first-letter, .map-item::first-letter {
+      text-transform: uppercase;
+    }
+
+    /* Ikon voice note dan tombol kirim di venting space */
+    .voice-input-area {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      background: #fafff7;
+      border: 3px solid #bcd9c5;
+      border-radius: 30px;
+      padding: 12px 20px;
+    }
+    .voice-input-area textarea {
+      flex: 1;
+      border: none;
+      background: transparent;
+      outline: none;
+      resize: none;
+      font-size: 1rem;
+      padding: 8px 0;
+    }
+    .voice-input-area .voice-icon {
+      font-size: 2rem;
+      color: #568f6b;
+      cursor: pointer;
+    }
+    .voice-input-area .send-btn {
+      background: #c8dfd4;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2c523e;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .voice-input-area .send-btn:hover {
+      background: #b4d2c2;
+    }
+
+    /* Essay type dengan warna lebih mencolok tapi tetap soft */
+    .essay-type-badge {
+      background: #f2c94c;  /* Kuning madu lembut */
+      color: #3b5e3b;
+      padding: 10px 24px;
+      border-radius: 60px;
+      font-weight: 700;
+      display: inline-block;
+      border: 2px solid #e0b354;
+    }
+
+    /* Rangkuman penjelasan essay type */
+    .essay-explanation {
+      background: #fffacd;
+      padding: 16px 24px;
+      border-radius: 40px;
+      margin-top: 16px;
+      border-left: 8px solid #d4b57e;
+    }
+
+    /* Pisah conclusion & final polish */
+    .conclusion-section, .final-polish-section {
+      background: #e0efe5;
+      border-radius: 32px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="slide-container">
+  <div class="slides-wrapper" id="slidesWrapper">
+    <!-- SLIDE 0: Selamat Datang + Pilih Mentor & Level -->
+    <div class="slide" id="slide0">
+      <div class="slide-content">
+        <div class="d-flex align-items-center gap-3 mt-4">
+          <span style="font-size: 5rem;">🦥🤍</span>
+          <h1 style="font-size: 3.4rem;">Prompt<span style="color:#789f85;">.</span>Coach</h1>
+        </div>
+        <p class="fs-4 mt-2" style="background:#dbefe0; border-radius:60px; padding:10px 30px; display:inline-block;">Teman Nulis Anti-Cemas · Sage Edition 🌱</p>
+
+        <div class="card-sage mt-5">
+          <h3><i class="fas fa-face-smile me-2"></i> Pilih Mentor Kamu</h3>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="chip-mentor active" data-mentor="santai" id="chipSantai">💬 Si Santai (Gaul)</span>
+            <span class="chip-mentor" data-mentor="analitis" id="chipAnalitis">📊 Si Analitis (Struktur)</span>
+            <span class="chip-mentor" data-mentor="semangat" id="chipSemangat">🌻 Si Penyemangat</span>
+          </div>
+          <div class="mt-4 p-3 rounded-4" style="background:#d9ecd9;" id="mentorQuoteSlide0">“Santuy wae, bestie! Nulis itu gausa tegang. 🦥”</div>
+        </div>
+
+        <div class="card-sage mt-4">
+          <h4>📋 Pilih Level Academic Writing (PBI)</h4>
+          <div class="d-flex gap-3 flex-wrap">
+            <button class="btn-sage level-btn" data-level="basic">🌱 Basic</button>
+            <button class="btn-sage level-btn" data-level="intermediate">🍃 Intermediate</button>
+            <button class="btn-sage level-btn" data-level="advanced">🌿 Advanced</button>
+          </div>
+          <div id="levelDescSlide0" class="mt-3 fst-italic">🌱 Basic: Paragraph unity & coherence, descriptive/narrative.</div>
+        </div>
+
+        <div class="text-center mt-5">
+          <button class="btn-sage" id="startToVent">✨ Mulai Brainstorming ✨</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 1: Venting Space + Voice Note + Kirim -->
+    <div class="slide" id="slide1">
+      <div class="slide-content">
+        <h2><i class="fas fa-microphone-alt me-2" style="color:#568f6b;"></i> Venting Space (Cerita Bebas)</h2>
+        <div class="bg-sage-light p-3 rounded-5 mb-3">
+          <i class="fas fa-play me-2"></i> Voice note (simulasi): “Aku risau sama pengaruh reels terhadap fokus kuliah...”
+        </div>
+        <!-- Kolom teks dengan ikon voice note dan tombol kirim -->
+        <div class="voice-input-area">
+          <textarea id="brainText" rows="2" placeholder="Ketik atau rekam suara... (Bisa campur Indo/Inggris)"></textarea>
+          <span class="voice-icon"><i class="fas fa-microphone"></i></span>
+          <span class="send-btn" id="sendVentBtn"><i class="fas fa-paper-plane"></i></span>
+        </div>
+
+        <div class="bubble-sage mt-3" id="feedbackBrainVent">
+          🦥 <strong>Si Santai:</strong> “Nah bagus! Ini cocok buat essay argumentatif atau ekspositori.”
+        </div>
+
+        <div class="mt-4">
+          <h5>🧠 Logic Map (AI Generate)</h5>
+          <div class="mind-map">
+            <span class="map-item">📱 Reels/Medsos</span>
+            <span class="map-item">🧠 Fokus Belajar Turun</span>
+            <span class="map-item">😰 Kecemasan</span>
+            <span class="map-item">📚 Prokrastinasi</span>
+            <span class="map-item">💡 Solusi: Digital Detox</span>
+          </div>
+        </div>
+
+        <button class="btn-sage mt-4" id="ventToMapBtn">Lanjut ke Logical Mapping ➔</button>
+        <button class="btn-outline-sage mt-3 ms-3" id="skipVentBtn" disabled>⏭️ Skip (Butuh 20+ Kata)</button>
+        <span class="ms-3" id="wordCountVent">Kata: 0</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Logical Mapping + Outline + Essay Type + Penjelasan -->
+    <div class="slide" id="slide2">
+      <div class="slide-content">
+        <h3>🗺️ Logical Mapping · Kerangka Esai</h3>
+        <div class="bg-sage-light p-4 rounded-5">
+          <p><strong>📌 Essay Type:</strong> <span class="essay-type-badge">Argumentative Essay</span></p>
+          <div class="essay-explanation">
+            <p><strong>Penjelasan Singkat:</strong> Essay argumentatif bertujuan meyakinkan pembaca dengan menyajikan argumen disertai bukti dan data. Cocok untuk isu kontroversial atau masalah yang membutuhkan solusi.</p>
+          </div>
+          <ul class="mt-3">
+            <li>Thesis: Medsos ganggu fokus, kampus perlu literasi digital.</li>
+            <li>Body 1: Dampak negatif (data).</li>
+            <li>Body 2: Penyebab dan counter.</li>
+            <li>Conclusion: Ajak bijak bermedsos.</li>
+          </ul>
+        </div>
+        <button class="btn-sage mt-4" id="mapToIntroBtn">Lanjut ke Introduction ➔</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Introduction + Feedback + Integrity Guard -->
+    <div class="slide" id="slide3">
+      <div class="slide-content">
+        <h4>📝 Introduction · Tulis Paragraf Pembuka</h4>
+        <textarea id="introInput" rows="3" class="form-control">Social media ruins students' focus. Many students cannot stop scrolling.</textarea>
+        <button class="btn-outline-sage mt-2" id="askIntroFb">Minta Feedback Mentor</button>
+        <div class="bubble-sage mt-2" id="introFbDisplay">💬 Tambah hook dan thesis statement biar kuat.</div>
+        <div class="anti-plag mt-3">
+          <i class="fas fa-shield-heart me-2"></i> <strong>Integrity-Guard:</strong> “Eits, jangan minta aku buatin langsung ya bestie. Ayo tulis versimu, aku bantu poles! 🫶🦥”
+        </div>
+        <button class="btn-sage mt-3" id="introToBodyBtn">Lanjut ke Body ➔</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Body + Feedback -->
+    <div class="slide" id="slide4">
+      <div class="slide-content">
+        <h4>🧱 Body Paragraph</h4>
+        <textarea rows="3" class="form-control">Based on survey, 70% open medsos while studying. This leads to distraction.</textarea>
+        <div class="bubble-sage mt-2">🌻 Tambah kutipan penelitian biar makin kuat!</div>
+        <button class="btn-sage mt-3" id="bodyToConclBtn">Lanjut ke Conclusion ➔</button>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Conclusion + Final Polish (Dipisah) + Smart Link + QR -->
+    <div class="slide" id="slide5">
+      <div class="slide-content">
+        <h4>🔚 Conclusion & Final Polish</h4>
+        
+        <!-- Bagian Conclusion -->
+        <div class="conclusion-section">
+          <h5>📌 Conclusion</h5>
+          <textarea rows="2" class="form-control" placeholder="Tulis kesimpulan...">Universities should provide digital literacy programs.</textarea>
+        </div>
+
+        <!-- Bagian Final Polish (terpisah, muncul setelah conclusion selesai diklik) -->
+        <div class="final-polish-section" id="finalPolishSection" style="display: none;">
+          <h5>✨ Final Polish (Perbaikan Akhir)</h5>
+          <p>Periksa kembali transisi antar paragraf dan tata bahasa. Berikut saran AI:</p>
+          <div class="bubble-sage">✅ Transisi sudah bagus, tambahkan kalimat penutup yang kuat.</div>
+          <!-- Masterpiece preview & self reflection -->
+          <div class="bg-sage-light p-3 rounded-4 my-3">
+            <h5>📘 Masterpiece Preview (Gabungan)</h5>
+            <p><em>Intro:</em> Social media ruins ... <em>Body:</em> Based on survey ... <em>Conclusion:</em> Universities should ...</p>
+            <label>Self-reflection (Untuk Laporan Dosen):</label>
+            <input type="text" class="form-control" value="Bagian tersulit: menyusun argumen">
+          </div>
+
+          <!-- Smart Link Integrity Package -->
+          <div style="background:#e3f0e0; border-radius: 60px; padding: 24px;">
+            <h5><i class="fas fa-link"></i> Smart-Link (Integrity Package)</h5>
+            <div class="d-flex gap-4">
+              <div class="qr-sim">🔲</div>
+              <div>
+                <p>promptcoach.id/share/mhsA</p>
+                <div class="d-flex gap-2 bg-white p-2 rounded-5">
+                  <span class="bg-sage-soft p-2 rounded-4">Final Work</span>
+                  <span>Timelapse</span>
+                  <span>Log</span>
+                </div>
+                <span><i class="fas fa-play"></i> Evolution timelapse: 1 kalimat → draf akhir</span>
+              </div>
+            </div>
+            <p class="mt-2"><i class="fas fa-download"></i> Download folder (Full Essay + Video Timelapse/Process Report + Masterpiece Review + QR)</p>
+          </div>
+        </div>
+
+        <!-- Tombol Selesai (untuk membuka final polish) -->
+        <button class="btn-sage mt-3" id="finishConclBtn">Selesai, Lanjut ke Final Polish</button>
+        <!-- Tombol Salin Link & Akhiri (muncul setelah final polish) -->
+        <button class="btn-sage mt-3" id="copyLinkBtn" style="display: none;">Salin Link & Akhiri</button>
+      </div>
+    </div>
+  </div> <!-- end slides-wrapper -->
+
+  <div class="slide-progress" id="slideProgress">
+    <div class="progress-dot" data-slide="0"></div>
+    <div class="progress-dot" data-slide="1"></div>
+    <div class="progress-dot" data-slide="2"></div>
+    <div class="progress-dot" data-slide="3"></div>
+    <div class="progress-dot" data-slide="4"></div>
+    <div class="progress-dot" data-slide="5"></div>
+  </div>
+</div>
+
+<!-- MASKOT SLOTH -->
+<div class="mascot-corner" id="mascot">
+  <span class="mascot-emoji" id="mascotEmoji">🦥💚</span>
+  <span class="mascot-text" id="mascotCaption">Pelan-pelan aja, bestie</span>
+</div>
+
+<script>
+  (function() {
+    const wrapper = document.getElementById('slidesWrapper');
+    const dots = document.querySelectorAll('.progress-dot');
+    let currentSlide = 0;
+    const totalSlides = 6;
+
+    function goToSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= totalSlides) index = totalSlides - 1;
+      currentSlide = index;
+      wrapper.style.transform = `translateX(-${currentSlide * 100}vw)`;
+      dots.forEach((dot, i) => {
+        if (i === currentSlide) dot.classList.add('active-dot');
+        else dot.classList.remove('active-dot');
+      });
+      const mascotT = document.getElementById('mascotCaption');
+      if (currentSlide === 0) mascotT.innerText = 'Pilih mentor dulu yuk';
+      else if (currentSlide === 1) mascotT.innerText = 'Cerita aja, aku dengerin';
+      else if (currentSlide === 2) mascotT.innerText = 'Nah, kerangka jadi';
+      else if (currentSlide === 3) mascotT.innerText = 'Tulis intro pelan';
+      else if (currentSlide === 4) mascotT.innerText = 'Body udah, semangat!';
+      else if (currentSlide === 5) mascotT.innerText = 'Final polish, tinggal QR';
+    }
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', () => goToSlide(idx));
+    });
+
+    let selectedMentor = 'santai';
+
+    const chipSantai = document.getElementById('chipSantai');
+    const chipAnalitis = document.getElementById('chipAnalitis');
+    const chipSemangat = document.getElementById('chipSemangat');
+    const mentorQuote = document.getElementById('mentorQuoteSlide0');
+
+    function updateMentorUI() {
+      document.querySelectorAll('.chip-mentor').forEach(c => c.classList.remove('active'));
+      if (selectedMentor === 'santai') {
+        chipSantai.classList.add('active');
+        mentorQuote.innerText = '“Santuy wae, bestie! Nulis itu gausa tegang. 🦥”';
+      } else if (selectedMentor === 'analitis') {
+        chipAnalitis.classList.add('active');
+        mentorQuote.innerText = '“Mari bedah struktur: kohesi, koherensi, dan diksi.”';
+      } else {
+        chipSemangat.classList.add('active');
+        mentorQuote.innerText = '“KAMU BISA! Setiap kata adalah kemenangan 🌻”';
+      }
+      updateFeedbackVent();
+    }
+
+    chipSantai.addEventListener('click', () => { selectedMentor = 'santai'; updateMentorUI(); });
+    chipAnalitis.addEventListener('click', () => { selectedMentor = 'analitis'; updateMentorUI(); });
+    chipSemangat.addEventListener('click', () => { selectedMentor = 'semangat'; updateMentorUI(); });
+
+    function updateFeedbackVent() {
+      const fbDiv = document.getElementById('feedbackBrainVent');
+      if (selectedMentor === 'santai') fbDiv.innerHTML = '🦥 <strong>Si Santai:</strong> “Nah bagus! Ini cocok buat essay argumentatif atau ekspositori.”';
+      else if (selectedMentor === 'analitis') fbDiv.innerHTML = '📊 <strong>Si Analitis:</strong> “Perlu data dan research gap. Pastikan thesis merepresentasikan argumen.”';
+      else fbDiv.innerHTML = '🌻 <strong>Si Penyemangat:</strong> “Ih ide kamu menarik! Aku yakin bisa jadi essay keren!”';
+    }
+
+    document.querySelectorAll('.level-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        let lvl = this.dataset.level;
+        let desc = '';
+        if (lvl === 'basic') desc = '🌱 Basic: Topic sentence, supporting details, unity.';
+        else if (lvl === 'intermediate') desc = '🍃 Intermediate: Argument, counter-argument, logical fallacies.';
+        else desc = '🌿 Advanced: Sintesis literatur, research gap.';
+        document.getElementById('levelDescSlide0').innerText = desc;
+      });
+    });
+
+    const brainInput = document.getElementById('brainText');
+    const wordSpan = document.getElementById('wordCountVent');
+    const skipVent = document.getElementById('skipVentBtn');
+    function countWords() {
+      let txt = brainInput.value;
+      let words = txt.split(/\s+/).filter(w => w.length).length;
+      wordSpan.innerText = 'Kata: ' + words;
+      if (words >= 20) skipVent.disabled = false;
+      else skipVent.disabled = true;
+    }
+    brainInput.addEventListener('input', countWords);
+    countWords();
+
+    document.getElementById('startToVent').addEventListener('click', () => goToSlide(1));
+    document.getElementById('ventToMapBtn').addEventListener('click', () => goToSlide(2));
+    document.getElementById('mapToIntroBtn').addEventListener('click', () => goToSlide(3));
+    document.getElementById('introToBodyBtn').addEventListener('click', () => goToSlide(4));
+    document.getElementById('bodyToConclBtn').addEventListener('click', () => goToSlide(5));
+    
+    // Tombol kirim (simulasi) dengan emoji perayaan 🎉
+    document.getElementById('sendVentBtn').addEventListener('click', () => {
+      alert('🎉✨ Pesan terkirim! Ide kamu sudah direkam. ✨🎉');
+    });
+
+    skipVent.addEventListener('click', () => {
+      if (!skipVent.disabled) {
+        alert('🎉 Selamat! Kamu memenuhi syarat skip. Lanjut ke mapping! 🎉');
+        goToSlide(2);
+      }
+    });
+
+    document.getElementById('askIntroFb').addEventListener('click', () => {
+      let fb = document.getElementById('introFbDisplay');
+      if (selectedMentor === 'santai') fb.innerText = '💬 Si Santai: Tambah hook dan thesis statement biar kuat.';
+      else if (selectedMentor === 'analitis') fb.innerText = '📊 Si Analitis: Pastikan ada latar belakang dan gap.';
+      else fb.innerText = '🌻 Si Penyemangat: Udah oke! Coba tambah sedikit data, kamu pasti bisa!';
+    });
+
+    // Tombol Selesai (Conclusion) untuk menampilkan Final Polish
+    document.getElementById('finishConclBtn').addEventListener('click', () => {
+      document.getElementById('finalPolishSection').style.display = 'block';
+      document.getElementById('copyLinkBtn').style.display = 'inline-block';
+      document.getElementById('finishConclBtn').style.display = 'none';
+      alert('🎉 Yeay! Kesimpulan selesai. Lanjut ke final polish! 🎉');
+    });
+
+    // Tombol Salin Link & Akhiri dengan emoji perayaan 🎉
+    document.getElementById('copyLinkBtn').addEventListener('click', () => {
+      alert('🎉🎉 SELAMAT! Link disalin: promptcoach.id/share/mhsA 🎉🎉\n\nFolder unduhan berisi:\n📄 Full Essay\n🎥 Video Timelapse/Process Report\n🌟 Masterpiece Review\n📱 QR Code\n\nKamu hebat! 🦥💚');
+    });
+
+    brainInput.addEventListener('focus', () => {
+      document.getElementById('mascotEmoji').innerText = '🦥📝';
+      document.getElementById('mascotCaption').innerText = 'Asyik ngetik!';
+    });
+    brainInput.addEventListener('blur', () => {
+      document.getElementById('mascotEmoji').innerText = '🦥💚';
+      document.getElementById('mascotCaption').innerText = 'Pelan-pelan aja, bestie';
+    });
+
+    goToSlide(0);
+    updateMentorUI();
+  })();
+</script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</body>
+</html>
