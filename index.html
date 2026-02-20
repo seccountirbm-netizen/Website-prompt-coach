@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>prompt.coach — sage edition, slide by slide</title>
   <!-- Quicksand font (soft) & font awesome -->
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -53,6 +53,61 @@
     .slide::-webkit-scrollbar { width: 8px; }
     .slide::-webkit-scrollbar-track { background: #e2eedb; border-radius: 20px; }
     .slide::-webkit-scrollbar-thumb { background: #a1baa9; border-radius: 20px; }
+
+    /* RESPONSIVE untuk HP */
+    @media (max-width: 768px) {
+      .slide {
+        padding: 16px 20px;
+      }
+      h1 { font-size: 2.2rem !important; }
+      h2 { font-size: 1.6rem; }
+      h3 { font-size: 1.4rem; }
+      .btn-sage, .btn-outline-sage {
+        padding: 10px 20px;
+        font-size: 0.95rem;
+      }
+      .chip-mentor {
+        padding: 6px 16px;
+        font-size: 0.9rem;
+      }
+      .card-sage {
+        padding: 20px 16px;
+      }
+      .voice-input-area {
+        padding: 8px 12px;
+      }
+      .mind-map {
+        padding: 16px;
+        gap: 8px;
+      }
+      .map-item {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+      .mascot-corner {
+        bottom: 70px;
+        right: 15px;
+        padding: 10px 16px;
+      }
+      .mascot-emoji { font-size: 2.5rem; }
+      .mascot-text { font-size: 0.8rem; max-width: 150px; }
+      .slide-progress {
+        padding: 8px 16px;
+        gap: 10px;
+        bottom: 15px;
+      }
+      .progress-dot {
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+    /* Tablet */
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .slide {
+        padding: 20px 30px;
+      }
+    }
 
     .bg-sage-soft { background: #e0efe5; }
     .bg-sage-light { background: #d4e6da; }
@@ -187,6 +242,20 @@
     .mascot-emoji { font-size: 4rem; }
     .mascot-text { font-weight: 600; color: #2a5a42; max-width: 200px; }
 
+    /* Plagiarism-to-Paraphrase Bridge - fitur khusus */
+    .plagiarism-bridge {
+      background: #ffe9d9;
+      border-radius: 60px;
+      padding: 20px 25px;
+      border-left: 12px solid #e5987c;
+      margin: 20px 0;
+      box-shadow: 0 8px 18px #f0d2c0;
+      border: 2px solid #ffc4a9;
+    }
+    .plagiarism-bridge i {
+      color: #c45d3a;
+    }
+
     .anti-plag {
       background: #e2dccd;
       border-radius: 60px;
@@ -201,11 +270,7 @@
 
     h1, h2, h3, h4 { color: #25563c; }
 
-    /* Kapitalisasi awal kalimat pada elemen tertentu */
-    .capitalize-first::first-letter {
-      text-transform: uppercase;
-    }
-    /* Untuk teks dalam elemen tertentu, pastikan awal kalimat huruf besar */
+    /* Kapitalisasi awal kalimat */
     p, .chip-mentor, .btn-sage, .btn-outline-sage, .bubble-sage, .map-item, .slide-content h2, .slide-content h3, .slide-content h4 {
       text-transform: lowercase;
     }
@@ -215,7 +280,7 @@
       text-transform: uppercase;
     }
 
-    /* Ikon voice note dan tombol kirim di venting space */
+    /* Ikon voice note dan tombol kirim */
     .voice-input-area {
       display: flex;
       align-items: flex-end;
@@ -257,9 +322,9 @@
       background: #b4d2c2;
     }
 
-    /* Essay type dengan warna lebih mencolok tapi tetap soft */
+    /* Essay type badge */
     .essay-type-badge {
-      background: #f2c94c;  /* Kuning madu lembut */
+      background: #f2c94c;
       color: #3b5e3b;
       padding: 10px 24px;
       border-radius: 60px;
@@ -268,7 +333,6 @@
       border: 2px solid #e0b354;
     }
 
-    /* Rangkuman penjelasan essay type */
     .essay-explanation {
       background: #fffacd;
       padding: 16px 24px;
@@ -277,7 +341,6 @@
       border-left: 8px solid #d4b57e;
     }
 
-    /* Pisah conclusion & final polish */
     .conclusion-section, .final-polish-section {
       background: #e0efe5;
       border-radius: 32px;
@@ -325,7 +388,7 @@
       </div>
     </div>
 
-    <!-- SLIDE 1: Venting Space + Voice Note + Kirim -->
+    <!-- SLIDE 1: Venting Space + Voice Note + Kirim + PLAGIARISM BRIDGE -->
     <div class="slide" id="slide1">
       <div class="slide-content">
         <h2><i class="fas fa-microphone-alt me-2" style="color:#568f6b;"></i> Venting Space (Cerita Bebas)</h2>
@@ -341,6 +404,12 @@
 
         <div class="bubble-sage mt-3" id="feedbackBrainVent">
           🦥 <strong>Si Santai:</strong> “Nah bagus! Ini cocok buat essay argumentatif atau ekspositori.”
+        </div>
+
+        <!-- FITUR PLAGIARISM-TO-PARAPHRASE BRIDGE (dengan edukasi) -->
+        <div class="plagiarism-bridge mt-3">
+          <i class="fas fa-copy fa-xl me-3"></i>
+          <strong>Plagiarism-to-Paraphrase Bridge:</strong> “Waduh, aku deteksi kalimat ini mirip banget sama sumber lain nih, Kak. 🚨 Hati-hati ya, kalau ketahuan dosen bisa berabe. Daripada copy-paste, gimana kalau kita coba parafrase? Kamu coba jelasin lagi pakai gaya bahasa kamu sendiri, nanti aku bantu poles biar tetep ilmiah tapi tetep 'kamu banget'. Mau aku kasih tips cara parafrase yang aman? Let's go! ✍️🔥”
         </div>
 
         <div class="mt-4">
